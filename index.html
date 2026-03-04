@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contabilidad MMM Samaniego </title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" type="image/png" href="./logo.png">
+    <link rel="apple-touch-icon" href="./logo.png">
+    <meta name="theme-color" content="#004a99">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div id="splash-screen">
+        <div class="splash-content">
+        <img src="./logo.png" alt="Logo MMM" class="splash-logo">
+        <h2 class="splash-text">Movimiento Misionero Mundial</h2>
+        <p>Samaniego</p>
+        <div class="loader"></div>
+    </div>
+</div>
+ <div id="login-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,74,153,0.95); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; color: white;">
+    <img src="./logo.png" style="width: 80px; margin-bottom: 20px;">
+    <h3>Acceso a Tesorería</h3>
+    <input type="password" id="pass-input" placeholder="Ingresa la contraseña" style="padding: 12px; border-radius: 8px; border: none; margin-bottom: 10px; width: 250px; text-align: center;">
+    <button onclick="verificarClave()" style="background: #ffcc00; color: #004a99; padding: 10px 30px; border-radius: 8px; font-weight: bold; cursor: pointer;">Entrar</button>
+    <p id="error-pass" style="color: #ffaaaa; margin-top: 10px; display: none;">Contraseña incorrecta</p>
+</div>
+        
+    <header>
+        <div class="logo-container">
+            <h1>MMM Actividades Samaniego</h1>
+            <p>Control de Ingresos y Egresos</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <form id="form-registro">
+                <div class="form-group">
+                    <label>Fecha</label>
+                    <input type="date" id="fecha" required>
+                </div>
+                <div class="form-group">
+                    <label>Actividad (Ej: Sancocho, Arepas)</label>
+                    <input type="text" id="detalle" placeholder="Nombre de la actividad" required style="text-transform: uppercase;">
+                </div>
+                <div class="form-group">
+                    <label>Tipo</label>
+                    <select id="tipo">
+                        <option value="entrada">Entrada (+)</option>
+                        <option value="salida">Salida (-)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Valor $</label>
+                    <input type="number" id="monto" placeholder="Monto COP" required>
+                </div>
+                <button type="submit" class="btn-save">Guardar Registro</button>
+                <button type="button" id="btnLimpiar" class="btn-danger">
+                <i class="fas fa-trash"></i> Limpiar Libro / Registro
+                </button>
+            </form>
+        </section>
+
+        <section class="actions">
+            <div class="filter-bar">
+                <div class="form-group">
+                    <label><small>Desde:</small></label>
+                    <input type="month" id="fecha-inicio">
+                </div>
+                <div class="form-group">
+                    <label><small>Hasta:</small></label>
+                    <input type="month" id="fecha-fin">
+                </div>
+                <input type="text" id="filter-actividad" placeholder="Filtrar actividad...">
+           </div>
+
+            <div class="button-group">
+                <button onclick="exportarPDF()" class="btn-pdf">PDF</button>
+                <button onclick="exportarExcel()" class="btn-excel">Excel</button>
+                <button onclick="respaldarDatos()" class="btn-backup">Respaldo</button>
+                <button onclick="document.getElementById('input-restaurar').click()" class="btn-restore">Restaurar</button>
+                <input type="file" id="input-restaurar" style="display: none;" accept=".json" onchange="restaurarDatos(event)">
+            </div>
+        </section>
+
+        <div id="resumen-totales"></div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Actividad</th>
+                        <th>Entrada</th>
+                        <th>Salida</th>
+                        <th>Saldo</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="lista-datos"></tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="./script.js"></script>
+</body>
+</html>
