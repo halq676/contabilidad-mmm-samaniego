@@ -262,3 +262,34 @@ window.addEventListener('beforeunload', (event) => {
         event.returnValue = '¿Recuerdas haber descargado el respaldo de hoy?';
     }
 });
+
+// Solicitar permiso para notificaciones al cargar
+if (Notification.permission !== "granted") {
+    Notification.requestPermission();
+}
+
+function verificarCierreDeMes() {
+    const hoy = new Date();
+    // Obtener el último día del mes actual
+    const ultimoDia = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).getDate();
+
+    if (hoy.getDate() === ultimoDia) {
+        enviarNotificacion("Recordatorio de Tesorería", "Hoy es el último día del mes. No olvides descargar el respaldo JSON de las actividades.");
+    }
+}
+
+function enviarNotificacion(titulo, mensaje) {
+    if (Notification.permission === "granted") {
+        navigator.serviceWorker.ready.then(registration => {
+            registration.showNotification(titulo, {
+                body: mensaje,
+                icon: "./logo.png", // Usamos el logo de la iglesia
+                badge: "./logo.png",
+                vibrate: [200, 100, 200]
+            });
+        });
+    }
+}
+
+// Ejecutar la revisión cada vez que abra la app
+verificarCierreDeMes();
