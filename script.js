@@ -87,13 +87,18 @@ if (!fInicio && !fFin) {
     let html = `<h3 style="color:#004a99; margin: 20px 0 10px 0;">Informe: ${nombreMes}</h3>
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:10px;">`;
     
-    for (let act in resumen) {
-        html += `<div style="background:white; padding:10px; border-radius:8px; border-left:5px solid #ffcc00; box-shadow: 0 2px 4px rgba(0,0,0,0.1)">
-                    <small style="color:#666; font-size:0.7rem;">TOTAL ${act}</small><br>
-                    <strong style="color:#004a99; font-size:1rem;">$${resumen[act].toLocaleString()}</strong>
-                 </div>`;
-    }
-    
+    // Busca esta parte dentro del "for (let act in resumen)" y déjala así:
+for (let act in resumen) {
+    let valorFormateado = resumen[act].toLocaleString();
+    html += `<div style="background:white; padding:10px; border-radius:8px; border-left:5px solid #ffcc00; box-shadow: 0 2px 4px rgba(0,0,0,0.1)">
+                <small style="color:#666; font-size:0.7rem;">TOTAL ${act}</small><br>
+                <strong style="color:#004a99; font-size:1rem;">$${valorFormateado}</strong>
+                <button onclick="guardarParaInforme('${act}', '${valorFormateado}')" 
+                        style="display:block; margin-top:5px; background:#004a99; color:white; border:none; border-radius:4px; cursor:pointer; font-size:0.6rem; padding:2px 5px;">
+                        + Añadir al informe
+                </button>
+             </div>`;
+}
     html += `</div>
         <div style="margin-top:15px; display:flex; gap:10px;">
             <div style="flex:1; padding:10px; background:#e8f4fd; color:#004a99; border-radius:8px; text-align:center; border:1px solid #004a99">
@@ -291,5 +296,93 @@ function enviarNotificacion(titulo, mensaje) {
     }
 }
 
+
 // Ejecutar la revisión cada vez que abra la app
 verificarCierreDeMes();
+
+// --- SISTEMA DE INFORME CONSOLIDADO INTELIGENTE ---
+let acumuladoInforme = {};
+
+function guardarParaInforme(actividad, monto) {
+    const lista = document.getElementById('lista-informe');
+    if(!lista) return;
+
+    // Convertimos el texto "$100.000" en número puro para poder sumar
+    const valorNumerico = parseFloat(monto.replace(/\./g, '').replace(/,/g, '').replace('$', ''));
+    
+    // Sumar si ya existe la actividad, o crearla si es nueva
+    if (acumuladoInforme[actividad]) {
+        acumuladoInforme[actividad] += valorNumerico;
+    } else {
+        acumuladoInforme[actividad] = valorNumerico;
+    }
+
+    renderizarListaInforme();
+}
+
+function renderizarListaInforme() {
+    const lista = document.getElementById('lista-informe');
+    lista.innerHTML = ""; 
+    let granTotalInforme = 0;
+
+    for (let act in acumuladoInforme) {
+        granTotalInforme += acumuladoInforme[act];
+        const item = document.createElement('li');
+        item.style.padding = "10px";
+        item.style.borderBottom = "1px solid #ddd";
+        item.style.display = "flex";
+        item.style.justifyContent = "space-between";
+        item.style.background = "white";
+        
+        item.innerHTML = `
+            <span style="text-transform:uppercase;"><strong>${act}</strong></span>
+            <span style="color:#004a99; font-weight:bold;">$${acumuladoInforme[act].toLocaleString()}</span>
+        `;
+        lista.appendChild(item);
+    }
+
+    if (Object.keys(acumuladoInforme).length > 0) {
+        const filaTotal = document.createElement('li');
+        filaTotal.style.padding = "10px";
+        filaTotal.style.marginTop = "10px";
+        filaTotal.style.background = "#ffcc00";
+        filaTotal.style.display = "flex";
+        filaTotal.style.justifyContent = "space-between";
+        filaTotal.style.borderRadius = "8px";
+        
+        filaTotal.innerHTML = `
+            <strong>SUMA TOTAL DEL INFORME:</strong>
+            <strong style="color:#004a99; font-size:1.1rem;">$${granTotalInforme.toLocaleString()}</strong>
+        `;
+        lista.appendChild(filaTotal);
+    }
+}
+
+function limpiarInformeTemporal() {
+    if(confirm("¿Deseas vaciar todos los datos acumulados en el informe?")) {
+        acumuladoInforme = {}; 
+        document.getElementById('lista-informe').innerHTML = "";
+    }
+}
+
+function copiarResumenInforme() {
+    if (Object.keys(acumuladoInforme).length === 0) {
+        alert("El informe está vacío.");
+        return;
+    }
+
+    let textoACopiar = "📋 *INFORME DE TESORERÍA MMM SAMANIEGO*\n\n";
+    let granTotal = 0;
+
+    for (let act in acumuladoInforme) {
+        textoACopiar += `🔹 ${act}: $${acumuladoInforme[act].toLocaleString()}\n`;
+        granTotal += acumuladoInforme[act];
+    }
+
+    textoACopiar += `\n💰 *TOTAL CONSOLIDADO: $${granTotal.toLocaleString()}*`;
+
+    navigator.clipboard.writeText(textoACopiar).then(() => {
+        alert("¡Informe copiado al portapapeles! Ya puedes pegarlo en WhatsApp.");
+    });
+}
+
