@@ -4,47 +4,138 @@
     --bg: #f4f7f6;
 }
 
-body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 0; }
+/* 1. Reset Global para centrado perfecto */
+* {
+    box-sizing: border-box; /* Crucial para que el padding no desplace los elementos */
+}
 
-header { background: var(--primary); color: white; padding: 20px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+body { 
+    font-family: 'Segoe UI', sans-serif; 
+    background: var(--bg); 
+    margin: 0; 
+    padding: 0; 
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra todo en el eje horizontal */
+}
 
-.container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+header { 
+    background: var(--primary); 
+    color: white; 
+    padding: 20px; 
+    text-align: center; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+    width: 100%; /* El encabezado sí ocupa todo el ancho */
+}
 
-.card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+/* 2. Ajuste del Contenedor para Celular */
+.container { 
+    width: 100%;
+    max-width: 800px; 
+    margin: 0 auto; 
+    padding: 15px; /* Padding uniforme para que no toque los bordes del celular */
+    display: flex;
+    flex-direction: column;
+}
+
+.card { 
+    background: white; 
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+    margin-bottom: 20px; 
+    width: 100%;
+}
 
 .form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
-input, select { padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
+input, select { 
+    padding: 12px; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    font-size: 16px; 
+    width: 100%; /* Asegura que ocupen todo el ancho del formulario */
+}
 
-.btn-save { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; }
+.btn-save { 
+    background: var(--primary); 
+    color: white; 
+    border: none; 
+    padding: 12px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    width: 100%; 
+    font-weight: bold; 
+    margin-bottom: 10px;
+}
 
-.actions { margin-bottom: 20px; }
-.filter-bar { display: flex; gap: 10px; margin-bottom: 10px; }
-.button-group { display: flex; flex-wrap: wrap; gap: 5px; }
+/* Botón Limpiar (Estilo Rojo) */
+.btn-danger {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+}
 
-button { border: none; border-radius: 5px; padding: 10px; cursor: pointer; font-weight: bold; }
+.actions { margin-bottom: 20px; width: 100%; }
+
+/* Ajuste de filtros para que no se amontonen en el celular */
+.filter-bar { 
+    display: flex; 
+    gap: 10px; 
+    margin-bottom: 10px; 
+    flex-wrap: wrap; /* Permite que bajen si no caben */
+}
+.filter-bar select, .filter-bar input {
+    flex: 1;
+    min-width: 150px;
+}
+
+.button-group { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 8px; 
+    justify-content: center; /* Centra los botones de exportación */
+}
+
+button { border: none; border-radius: 5px; padding: 10px 15px; cursor: pointer; font-weight: bold; }
 .btn-pdf { background: #e74c3c; color: white; }
 .btn-excel { background: #27ae60; color: white; }
 .btn-backup { background: #2980b9; color: white; }
 .btn-restore { background: #f39c12; color: white; }
 
-.table-container { overflow-x: auto; background: white; border-radius: 10px; }
-table { width: 100%; border-collapse: collapse; }
+/* 3. Tabla Responsiva */
+.table-container { 
+    overflow-x: auto; 
+    background: white; 
+    border-radius: 10px; 
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+table { width: 100%; border-collapse: collapse; min-width: 600px; /* Evita que la tabla se comprima demasiado */ }
 th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
 th { background: #eee; }
 
-/* Splash Screen Estilos */
+/* Splash Screen Centrado Total */
 #splash-screen {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: var(--primary); display: flex; justify-content: center;
     align-items: center; z-index: 10000; transition: opacity 0.5s ease;
 }
-.splash-content { text-align: center; color: white; }
+.splash-content { text-align: center; color: white; padding: 20px; }
 .splash-logo { width: 120px; animation: pulse 2s infinite; }
-.loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--secondary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
-.loader {
-    /* ... lo que ya tienes ... */
-    position: relative; /* Asegura que no flote por toda la pantalla */
-    z-index: 1;        /* Lo mantiene por debajo del login */
+.loader { 
+    border: 4px solid #f3f3f3; 
+    border-top: 4px solid var(--secondary); 
+    border-radius: 50%; 
+    width: 30px; 
+    height: 30px; 
+    animation: spin 1s linear infinite; 
+    margin: 20px auto; 
 }
 
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
