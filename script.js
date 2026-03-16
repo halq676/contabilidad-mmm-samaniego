@@ -385,4 +385,35 @@ function copiarResumenInforme() {
         alert("¡Informe copiado al portapapeles! Ya puedes pegarlo en WhatsApp.");
     });
 }
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then(reg => {
+                reg.onupdatefound = () => {
+                    const installingWorker = reg.installing;
+                    installingWorker.onstatechange = () => {
+                        if (installingWorker.state === 'installed') {
+                            if (navigator.serviceWorker.controller) {
+                                // CREAR AVISO VISUAL DE ACTUALIZACIÓN
+                                const aviso = document.createElement('div');
+                                aviso.innerHTML = `
+                                    <div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); 
+                                                background: #ffcc00; color: #004a99; padding: 15px; border-radius: 10px; 
+                                                font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 10001; 
+                                                text-align: center; width: 80%; max-width: 300px;">
+                                        Nueva actualización disponible<br>
+                                        <button onclick="location.reload()" style="margin-top: 10px; background: #004a99; 
+                                                color: white; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer;">
+                                            Actualizar ahora
+                                        </button>
+                                    </div>`;
+                                document.body.appendChild(aviso);
+                            }
+                        }
+                    };
+                };
+            })
+            .catch(err => console.log('Error al registrar el SW:', err));
+    });
+}
 
