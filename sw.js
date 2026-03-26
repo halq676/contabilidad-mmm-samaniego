@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mmm-samaniego-v5';
+const CACHE_NAME = 'mmm-samaniego-v6';
 
 const assets = [
   './',
@@ -48,6 +48,10 @@ self.addEventListener('activate', e => {
 
 // FETCH (robusto offline)
 self.addEventListener('fetch', e => {
+
+  // 🔴 SOLUCIÓN CLAVE: ignorar requests inválidos (extensiones, chrome://, etc)
+  if (!e.request.url.startsWith('http')) return;
+
   e.respondWith(
     caches.match(e.request)
       .then(res => {
@@ -55,6 +59,12 @@ self.addEventListener('fetch', e => {
 
         return fetch(e.request)
           .then(networkRes => {
+
+            // ⚠ evitar guardar respuestas inválidas
+            if (!networkRes || networkRes.status !== 200 || networkRes.type !== 'basic') {
+              return networkRes;
+            }
+
             return caches.open(CACHE_NAME).then(cache => {
               cache.put(e.request, networkRes.clone());
               return networkRes;

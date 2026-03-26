@@ -102,7 +102,11 @@
                 <button class="btn-pdf" onclick="exportarPDF()">PDF</button>
                 <button class="btn-excel" onclick="exportarExcel()">Excel</button>
                 <button class="btn-backup" onclick="respaldarDatos()">Backup</button>
-                <input type="file" onchange="restaurarDatos(event)">
+               <button class="btn-restore" onclick="document.getElementById('fileRestore').click()">
+    Restaurar copia
+</button>
+
+<input type="file" id="fileRestore" accept=".json" style="display:none" onchange="restaurarDatos(event)">
                 <button id="btnLimpiar" class="btn-danger">Limpiar</button>
             </div>
         </div>

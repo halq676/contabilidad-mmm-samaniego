@@ -140,18 +140,27 @@ function respaldarDatos() {
 function restaurarDatos(e) {
     const file = e.target.files[0];
     if (!file) return;
+
+    // Validar que sea JSON
+    if (!file.name.endsWith('.json')) {
+        alert("Selecciona un archivo JSON válido");
+        return;
+    }
+
     const reader = new FileReader();
     reader.onload = (event) => {
         try {
             movimientos = JSON.parse(event.target.result);
             localStorage.setItem('datos_iglesia_mmm', JSON.stringify(movimientos));
             mostrarTabla();
-            alert("¡Base de datos restaurada!");
-        } catch(err) { alert("Archivo no válido"); }
+            alert("¡Datos restaurados correctamente!");
+        } catch (err) {
+            alert("Error al leer el archivo");
+        }
     };
+
     reader.readAsText(file);
 }
-
 function exportarExcel() {
     const ws = XLSX.utils.json_to_sheet(movimientos);
     const wb = XLSX.utils.book_new();
