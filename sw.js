@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mmm-samaniego-v4';
+const CACHE_NAME = 'mmm-samaniego-v5';
 
 const assets = [
   './',
@@ -18,10 +18,18 @@ const assets = [
   './libs/webfonts/fa-solid-900.woff2'
 ];
 // INSTALACIÓN
+// INSTALACIÓN SEGURA
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(assets))
+    caches.open(CACHE_NAME).then(async cache => {
+      for (const asset of assets) {
+        try {
+          await cache.add(asset);
+        } catch (err) {
+          console.warn('No se pudo cachear:', asset);
+        }
+      }
+    })
   );
   self.skipWaiting();
 });
