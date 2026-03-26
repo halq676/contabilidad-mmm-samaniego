@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mmm-samaniego-v7';
+const CACHE_NAME = 'mmm-samaniego-v8';
 
 const assets = [
   './',
