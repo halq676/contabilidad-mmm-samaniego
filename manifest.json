@@ -1,4 +1,5 @@
 {
+  "id": "/",
   "short_name": "MMM Samaniego",
   "name": "Tesorería MMM Samaniego",
   "icons": [
@@ -12,13 +13,12 @@
       "src": "./logo.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ],
-  "start_url": "./index.html",
-  "scope": "./",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "theme_color": "#004a99",
-  "background_color": "#ffffff",
-  "orientation": "portrait"
+  "background_color": "#ffffff"
 }

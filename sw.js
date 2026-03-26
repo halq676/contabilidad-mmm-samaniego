@@ -1,4 +1,5 @@
-const CACHE_NAME = 'mmm-samaniego-v2'; // Cambiamos a v2 para que el celular detecte el cambio
+const CACHE_NAME = 'mmm-samaniego-v4';
+
 const assets = [
   './',
   './index.html',
@@ -6,39 +7,56 @@ const assets = [
   './script.js',
   './manifest.json',
   './logo.png',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css', // ¡No olvides esta!
-  'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'
-];
 
-// 1. Instalación (Guardar todo)
+  // LIBRERÍAS LOCALES
+  './libs/all.min.css',
+  './libs/jspdf.umd.min.js',
+  './libs/jspdf.plugin.autotable.min.js',
+  './libs/xlsx.full.min.js',
+
+  // FONT AWESOME
+  './libs/webfonts/fa-solid-900.woff2'
+];
+// INSTALACIÓN
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(assets);
-    })
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(assets))
   );
   self.skipWaiting();
 });
 
-// 2. Limpieza (Borrar caché vieja)
+// ACTIVACIÓN
 self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then(keys => {
-      return Promise.all(
-        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
-      );
-    })
+    caches.keys().then(keys =>
+      Promise.all(
+        keys.filter(key => key !== CACHE_NAME)
+            .map(key => caches.delete(key))
+      )
+    ).then(() => self.clients.claim())
   );
 });
 
-// 3. ESTRATEGIA CORREGIDA: Cache First
-// Primero busca en el teléfono, si está ahí, lo abre al instante.
+// FETCH (robusto offline)
 self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then(res => {
-      return res || fetch(e.request);
-    })
+    caches.match(e.request)
+      .then(res => {
+        if (res) return res;
+
+        return fetch(e.request)
+          .then(networkRes => {
+            return caches.open(CACHE_NAME).then(cache => {
+              cache.put(e.request, networkRes.clone());
+              return networkRes;
+            });
+          })
+          .catch(() => {
+            if (e.request.mode === 'navigate') {
+              return caches.match('./index.html');
+            }
+          });
+      })
   );
 });

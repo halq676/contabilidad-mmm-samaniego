@@ -222,12 +222,7 @@ function verificarClave() {
         input.focus();
     }
 }
-// --- FIN DEL SISTEMA DE SEGURIDAD ---
 
-// Registro de Service Worker (Para modo sin internet)
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').catch(err => console.error(err));
-}
 
 // CÓDIGO CORREGIDO PARA LIMPIAR EL LIBRO
 document.getElementById('btnLimpiar').addEventListener('click', function() {
@@ -394,7 +389,6 @@ if ('serviceWorker' in navigator) {
                     installingWorker.onstatechange = () => {
                         if (installingWorker.state === 'installed') {
                             if (navigator.serviceWorker.controller) {
-                                // CREAR AVISO VISUAL DE ACTUALIZACIÓN
                                 const aviso = document.createElement('div');
                                 aviso.innerHTML = `
                                     <div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); 
@@ -415,5 +409,37 @@ if ('serviceWorker' in navigator) {
             })
             .catch(err => console.log('Error al registrar el SW:', err));
     });
+
+    // ===== INSTALADOR PWA =====
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+
+    const btn = document.createElement('button');
+    btn.textContent = "Instalar App";
+    btn.style.position = "fixed";
+    btn.style.bottom = "20px";
+    btn.style.right = "20px";
+    btn.style.padding = "10px";
+    btn.style.background = "#004a99";
+    btn.style.color = "#fff";
+    btn.style.border = "none";
+    btn.style.borderRadius = "8px";
+    btn.style.zIndex = "9999";
+
+    btn.onclick = async () => {
+        if (!deferredPrompt) return;
+
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+
+        deferredPrompt = null;
+        btn.remove();
+    };
+
+    document.body.appendChild(btn);
+});
 }
 
