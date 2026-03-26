@@ -7,6 +7,10 @@ const assets = [
   './script.js',
   './manifest.json',
   './logo.png',
+  './libs/all.min.css',
+  './libs/jspdf.umd.min.js',
+  './libs/jspdf.plugin.autotable.min.js',
+  './libs/xlsx.full.min.js',
 
   // LIBRERÍAS LOCALES
   './libs/all.min.css',
