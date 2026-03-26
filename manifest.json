@@ -1,5 +1,5 @@
 {
-  "id": "/",
+  "id": "/contabilidad-mmm-samaniego/",
   "short_name": "MMM Samaniego",
   "name": "Tesorería MMM Samaniego",
   "icons": [
@@ -13,12 +13,13 @@
       "src": "./logo.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ],
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/contabilidad-mmm-samaniego/",
+  "scope": "/contabilidad-mmm-samaniego/",
   "display": "standalone",
   "theme_color": "#004a99",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "orientation": "portrait"
 }
