@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMM Samaniego</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#004a99">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./libs/all.min.css">
+
+    <!-- ICONO -->
+    <link rel="icon" href="./logo.png">
+</head>
+
+<body>
+
+    <!-- SPLASH -->
+    <div id="splash-screen">
+        <div class="splash-content">
+            <img src="./logo.png" class="splash-logo">
+            <div class="loader"></div>
+        </div>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="login-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:9999;">
+        <div style="background:#004a99; padding:20px; border-radius:10px; color:white; text-align:center;">
+            <h3>Acceso Seguro</h3>
+            <input type="password" id="pass-input" placeholder="Ingrese clave" style="padding:10px; margin:10px 0;">
+            <br>
+            <button onclick="verificarClave()">Ingresar</button>
+            <p id="error-pass" style="color:red; display:none;">Contraseña incorrecta</p>
+        </div>
+    </div>
+
+    <!-- CONTENIDO -->
+    <header>
+        <h2>📊 Tesorería MMM Samaniego</h2>
+    </header>
+
+    <div class="container">
+
+        <!-- FORMULARIO -->
+        <div class="card">
+            <form id="form-registro">
+                <div class="form-group">
+                    <input type="date" id="fecha" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="detalle" placeholder="Detalle" required>
+                </div>
+                <div class="form-group">
+                    <select id="tipo">
+                        <option value="entrada">Entrada</option>
+                        <option value="salida">Salida</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="number" id="monto" placeholder="Monto" required>
+                </div>
+                <button class="btn-save">Guardar</button>
+            </form>
+        </div>
+
+        <!-- FILTROS -->
+        <div class="card">
+            <div class="filter-bar">
+                <input type="month" id="fecha-inicio">
+                <input type="month" id="fecha-fin">
+                <input type="text" id="filter-actividad" placeholder="Buscar actividad">
+            </div>
+        </div>
+
+        <!-- RESUMEN -->
+        <div id="resumen-totales"></div>
+
+        <!-- TABLA -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Detalle</th>
+                        <th>Entrada</th>
+                        <th>Salida</th>
+                        <th>Neto</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-datos"></tbody>
+            </table>
+        </div>
+
+        <!-- BOTONES -->
+        <div class="actions">
+            <div class="button-group">
+                <button class="btn-pdf" onclick="exportarPDF()">PDF</button>
+                <button class="btn-excel" onclick="exportarExcel()">Excel</button>
+                <button class="btn-backup" onclick="respaldarDatos()">Backup</button>
+               <button class="btn-restore" onclick="document.getElementById('fileRestore').click()">
+    Restaurar copia
+</button>
+
+<input type="file" id="fileRestore" accept=".json" style="display:none" onchange="restaurarDatos(event)">
+                <button id="btnLimpiar" class="btn-danger">Limpiar</button>
+            </div>
+        </div>
+
+        <!-- INFORME -->
+        <div class="card">
+            <h3>Informe Consolidado</h3>
+            <ul id="lista-informe"></ul>
+            <button onclick="limpiarInformeTemporal()">Limpiar Informe</button>
+            <button onclick="copiarResumenInforme()">Copiar Informe</button>
+        </div>
+
+    </div>
+
+    <!-- LIBRERÍAS (LOCAL) -->
+    <script src="./libs/jspdf.umd.min.js"></script>
+    <script src="./libs/jspdf.plugin.autotable.min.js"></script>
+    <script src="./libs/xlsx.full.min.js"></script>
+
+    <!-- SCRIPT PRINCIPAL -->
+    <script src="./script.js"></script>
+
+</body>
+</html>
