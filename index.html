@@ -14,11 +14,40 @@
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="./libs/all.min.css">
 
+    <style>
+        body.splash-active {
+            overflow: hidden;
+        }
+
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        #splash-screen .splash-logo {
+            animation: none;
+        }
+
+        #splash-screen.is-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+
     <!-- ICONO -->
     <link rel="icon" href="./logo.png">
 </head>
 
-<body>
+<body class="splash-active">
 
     <!-- SPLASH -->
     <div id="splash-screen">

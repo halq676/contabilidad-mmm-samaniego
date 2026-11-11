@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mmm-samaniego-v1.0.1';
+const CACHE_NAME = 'mmm-samaniego-v1.0.2';
 
 const urlsToCache = [
   '/tesoreria-samaniego/',

@@ -258,9 +258,10 @@ window.onload = () => {
     setTimeout(() => {
         const splash = document.getElementById('splash-screen');
         if(splash){
-            splash.style.opacity = '0';
+            splash.classList.add('is-hidden');
             setTimeout(() => {
                 splash.style.display = 'none';
+                document.body.classList.remove('splash-active');
                 document.getElementById('login-modal').style.display = 'flex';
             }, 500);
         }
@@ -306,4 +307,3 @@ function abrirInforme() {
 function cerrarInforme() {
     document.getElementById('pantalla-informe').style.display = "none";
 }
-
