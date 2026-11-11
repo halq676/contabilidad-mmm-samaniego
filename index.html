@@ -40,106 +40,178 @@
     </div>
 
     <!-- CONTENIDO -->
-    <header>
-        <h2>📊 Tesorería MMM Samaniego</h2>
-    </header>
-
-    <div class="container">
-
-        <!-- FORMULARIO -->
-        <div class="card">
-            <form id="form-registro">
-                <div class="form-group">
-                    <input type="date" id="fecha" required>
+    <div class="app-topbar">
+        <header class="app-header">
+            <div class="header-content">
+                <img src="./logo.png" class="header-logo" alt="">
+                <div>
+                    <p class="eyebrow">Administración financiera</p>
+                    <h1>Tesorería MMM Samaniego</h1>
                 </div>
-                <div class="form-group">
-                    <input type="text" id="detalle" placeholder="Detalle" required>
-                </div>
-                <div class="form-group">
-                    <select id="tipo">
-                        <option value="entrada">Entrada</option>
-                        <option value="salida">Salida</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <input type="number" id="monto" placeholder="Monto" required>
-                </div>
-                <button class="btn-save">Guardar</button>
-            </form>
-        </div>
-
-        <!-- FILTROS -->
-        <div class="card">
-            <div class="filter-bar">
-                <input type="month" id="fecha-inicio">
-                <input type="month" id="fecha-fin">
-                <input type="text" id="filter-actividad" placeholder="Buscar actividad">
             </div>
-            <button onclick="abrirInforme()">📊 Ver Informe</button>
-        </div>
+        </header>
 
-        
-
-        <!-- TABLA -->
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Detalle</th>
-                        <th>Entrada</th>
-                        <th>Salida</th>
-                        <th>Neto</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody id="lista-datos"></tbody>
-            </table>
-        </div>
-
-        <!-- BOTONES -->
-        <div class="actions">
-            <div class="button-group">
-                <button class="btn-pdf" onclick="exportarPDF()">PDF</button>
-                <button class="btn-excel" onclick="exportarExcel()">Excel</button>
-                <button class="btn-backup" onclick="respaldarDatos()">Backup</button>
-               <button class="btn-restore" onclick="document.getElementById('fileRestore').click()">
-    Restaurar copia
-</button>
-
-<input type="file" id="fileRestore" accept=".json" style="display:none" onchange="restaurarDatos(event)">
-                <button id="btnLimpiar" class="btn-danger">Limpiar</button>
-            </div>
-        </div>
-
+        <nav class="tabs" aria-label="Secciones de tesorería">
+            <button class="tab-button active" type="button" data-view="registrar" aria-selected="true">
+                <span class="tab-icon" aria-hidden="true">✎</span><span>Registrar</span>
+            </button>
+            <button class="tab-button" type="button" data-view="filtrar" aria-selected="false">
+                <span class="tab-icon" aria-hidden="true">⌕</span><span>Filtrar</span>
+            </button>
+            <button class="tab-button" type="button" data-view="informe" aria-selected="false">
+                <span class="tab-icon" aria-hidden="true">▥</span><span>Informe</span>
+            </button>
+            <button class="tab-button" type="button" data-view="tabla" aria-selected="false">
+                <span class="tab-icon" aria-hidden="true">▤</span><span>Registros</span>
+            </button>
+        </nav>
     </div>
+
+    <main class="container">
+        <section class="app-view view-registrar active" data-panel="registrar" aria-labelledby="title-registrar">
+            <div class="section-heading">
+                <p class="eyebrow">Nuevo movimiento</p>
+                <h2 id="title-registrar">Registrar ingreso o gasto</h2>
+                <p>Completa los datos para guardar un movimiento en la tesorería.</p>
+            </div>
+            <div class="card">
+                <form id="form-registro">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="fecha">Fecha</label>
+                            <input type="date" id="fecha" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="detalle">Actividad o detalle</label>
+                            <input type="text" id="detalle" placeholder="Ej. Aporte dominical" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo">Tipo de movimiento</label>
+                            <select id="tipo">
+                                <option value="entrada">Entrada</option>
+                                <option value="salida">Salida</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="monto">Monto</label>
+                            <input type="number" id="monto" placeholder="0" min="0" step="any" required>
+                        </div>
+                    </div>
+                    <button class="btn-save" type="submit">Guardar en Base de Datos</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="app-view view-filtrar" data-panel="filtrar" aria-labelledby="title-filtrar">
+            <div class="section-heading">
+                <p class="eyebrow">Búsqueda</p>
+                <h2 id="title-filtrar">Filtrar movimientos</h2>
+                <p>Los filtros se aplican a los registros y al informe.</p>
+            </div>
+            <div class="card">
+                <div class="filter-bar">
+                    <div class="form-group">
+                        <label for="fecha-inicio">Desde</label>
+                        <input type="month" id="fecha-inicio">
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha-fin">Hasta</label>
+                        <input type="month" id="fecha-fin">
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-actividad">Actividad</label>
+                        <input type="text" id="filter-actividad" placeholder="Buscar actividad">
+                    </div>
+                </div>
+                <p class="helper-text">Puedes combinar las fechas con una búsqueda por actividad.</p>
+            </div>
+        </section>
+
+        <section class="app-view view-informe" data-panel="informe" aria-labelledby="title-informe">
+            <div class="section-heading">
+                <p class="eyebrow">Resumen financiero</p>
+                <h2 id="title-informe">Informe consolidado</h2>
+                <p>Consulta y comparte el informe de los movimientos que coinciden con tus filtros.</p>
+            </div>
+            <div class="card report-card">
+                <div class="report-mark" aria-hidden="true">▥</div>
+                <div>
+                    <h3>Ver informe</h3>
+                    <p>Genera el resumen de ingresos, salidas y saldo total.</p>
+                </div>
+                <button class="btn-primary" type="button" onclick="abrirInforme()">Ver Informe</button>
+            </div>
+        </section>
+
+        <section class="app-view view-tabla" data-panel="tabla" aria-labelledby="title-tabla">
+            <div class="section-heading">
+                <p class="eyebrow">Tesorería</p>
+                <h2 id="title-tabla">Registros</h2>
+                <p>Consulta, exporta o administra los movimientos guardados.</p>
+            </div>
+            <div class="card table-card">
+                <div class="table-heading">
+                    <h3>Movimientos registrados</h3>
+                    <span class="table-hint">Desliza horizontalmente para ver todas las columnas</span>
+                </div>
+                <div class="actions table-toolbar">
+                    <div class="button-group">
+                        <button class="btn-pdf" type="button" onclick="exportarPDF()">PDF</button>
+                        <button class="btn-excel" type="button" onclick="exportarExcel()">Excel</button>
+                        <button class="btn-backup" type="button" onclick="respaldarDatos()">Backup</button>
+                        <button class="btn-restore" type="button" onclick="document.getElementById('fileRestore').click()">Restaurar copia</button>
+                        <input type="file" id="fileRestore" accept=".json" hidden onchange="restaurarDatos(event)">
+                        <button id="btnLimpiar" class="btn-danger" type="button">Limpiar</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Detalle</th>
+                                <th>Entrada</th>
+                                <th>Salida</th>
+                                <th>Neto</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-datos"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- LIBRERÍAS (LOCAL) -->
     <script src="./libs/jspdf.umd.min.js"></script>
     <script src="./libs/jspdf.plugin.autotable.min.js"></script>
     <script src="./libs/xlsx.full.min.js"></script>
 
-    <div id="pantalla-informe" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#0f172a; z-index:9999; overflow:auto; padding:20px;">
+    <div id="pantalla-informe" class="report-screen" style="display:none;">
 
-    <div style="max-width:800px; margin:auto;">
+    <div class="report-dialog">
 
         <!-- HEADER -->
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <h2 style="color:white;">📊 Informe Consolidado</h2>
-            <button onclick="cerrarInforme()" style="padding:10px 15px;">✖</button>
+        <div class="report-header">
+            <div>
+                <p class="eyebrow">Resumen financiero</p>
+                <h2>📊 Informe Consolidado</h2>
+            </div>
+            <button class="report-close" type="button" onclick="cerrarInforme()" aria-label="Cerrar informe">✕</button>
         </div>
         
 
         <!-- LISTA -->
-        <div style="background:#1e293b; padding:20px; border-radius:12px;">
-        <ul id="lista-informe" style="color:white; list-style:none; padding:0;"></ul>
+        <div class="report-content">
+        <ul id="lista-informe"></ul>
             
         </div>
 
         <!-- BOTONES -->
-        <div style="margin-top:20px; display:flex; gap:10px;">
-            <button onclick="copiarInforme()">Copiar</button>
-            <button onclick="limpiarInforme()">Limpiar</button>
+        <div class="report-actions">
+            <button class="btn-copy" type="button" onclick="copiarInforme()">Copiar</button>
+            <button class="btn-danger" type="button" onclick="limpiarInforme()">Limpiar</button>
             
         </div>
 
@@ -147,10 +219,49 @@
 
 </div>
 
+    <div id="toast-registro" class="toast-registro" role="status" aria-live="polite">
+        <span class="toast-check" aria-hidden="true">✓</span>
+        <span>¡Registro con éxito!</span>
+    </div>
+
     <!-- SCRIPT PRINCIPAL -->
     <script src="./script.js"></script>
+    <script>
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const view = button.dataset.view;
+                document.querySelectorAll('.tab-button').forEach(tab => {
+                    const selected = tab === button;
+                    tab.classList.toggle('active', selected);
+                    tab.setAttribute('aria-selected', selected);
+                });
+                document.querySelectorAll('.app-view').forEach(panel => {
+                    panel.classList.toggle('active', panel.dataset.panel === view);
+                });
+                const reportScreen = document.getElementById('pantalla-informe');
+                if (view === 'informe') {
+                    abrirInforme();
+                } else if (reportScreen.style.display === 'block') {
+                    cerrarInforme();
+                }
+            });
+        });
 
-    
+        const registroForm = document.getElementById('form-registro');
+        const registroToast = document.getElementById('toast-registro');
+        let registroToastTimeout;
+
+        registroForm.addEventListener('submit', () => {
+            if (registroForm.elements.fecha.value || registroForm.elements.detalle.value ||
+                registroForm.elements.monto.value) return;
+
+            registroToast.classList.add('visible');
+            clearTimeout(registroToastTimeout);
+            registroToastTimeout = setTimeout(() => {
+                registroToast.classList.remove('visible');
+            }, 3200);
+        });
+    </script>
 
 </body>
 </html>
