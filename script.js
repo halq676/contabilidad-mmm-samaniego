@@ -15,6 +15,7 @@ function mostrarTabla() {
     tablaBody.innerHTML = "";
 
     let saldoTotalGeneral = 0;
+    const saldoPorMovimiento = new Map();
     let resumenActividades = {};
 
     const inicioSel = document.getElementById('fecha-inicio').value;
@@ -25,6 +26,7 @@ function mostrarTabla() {
         const entrada = item.tipo === 'entrada' ? parseFloat(item.monto) : 0;
         const salida = item.tipo === 'salida' ? parseFloat(item.monto) : 0;
         saldoTotalGeneral += (entrada - salida);
+        saldoPorMovimiento.set(item, saldoTotalGeneral);
     });
 
     const movimientosFiltrados = movimientos.filter(item => {
@@ -38,7 +40,10 @@ function mostrarTabla() {
     movimientosFiltrados.forEach((item, index) => {
         const entrada = item.tipo === 'entrada' ? parseFloat(item.monto) : 0;
         const salida = item.tipo === 'salida' ? parseFloat(item.monto) : 0;
-        const neto = entrada - salida;
+        const neto = saldoPorMovimiento.get(item);
+        const netoFormateado = neto < 0
+            ? `-$${Math.abs(neto).toLocaleString()}`
+            : `$${neto.toLocaleString()}`;
 
         const actNombre = item.detalle.trim().toUpperCase();
         resumenActividades[actNombre] = (resumenActividades[actNombre] || 0) + neto;
@@ -49,7 +54,7 @@ function mostrarTabla() {
             <td style="text-transform:uppercase;">${item.detalle}</td>
             <td style="color:green;">${entrada ? '$' + entrada.toLocaleString() : '-'}</td>
             <td style="color:red;">${salida ? '$' + salida.toLocaleString() : '-'}</td>
-            <td>$${neto.toLocaleString()}</td>
+            <td>${netoFormateado}</td>
             <td><button onclick="borrarRegistro(${index})">X</button></td>
         `;
         tablaBody.appendChild(fila);
